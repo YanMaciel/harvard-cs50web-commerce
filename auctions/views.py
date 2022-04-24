@@ -67,4 +67,5 @@ def register(request):
 def create_listing(request):
     if request.method == "POST":
         print(request.POST["title"])
+        print(request.POST)
     return render(request, "auctions/create_listing.html")
