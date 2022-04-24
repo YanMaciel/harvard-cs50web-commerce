@@ -1,0 +1,13 @@
+Auctions:
+    title
+    description
+    image (optionally)
+    category (optionally)
+    Bid
+
+Bids:
+
+
+
+Comments:
+
