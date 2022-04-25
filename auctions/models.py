@@ -11,5 +11,9 @@ class Item(models.Model):
     description = models.CharField(max_length=256)
     image_url = models.CharField(max_length=600)
     category = models.CharField(max_length=64)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="my_listings")
+    
+    def __str__(self):
+        return f"Item of ID {self.id}, name: {self.title} and owner: {self.owner.username}."
     
     

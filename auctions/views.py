@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User
+from .models import User, Item
 
 
 def index(request):
@@ -66,6 +66,13 @@ def register(request):
 @login_required
 def create_listing(request):
     if request.method == "POST":
-        print(request.POST["title"])
-        print(request.POST)
+        listing = Item(
+            title=request.POST["title"],
+            description=request.POST["description"],
+            image_url=request.POST["image_url"],
+            category=request.POST["category"],
+            owner=User(id=request.user.id)
+        )
+        listing.save()
+        # print(Item.objects.filter(owner=request.user.id))
     return render(request, "auctions/create_listing.html")
