@@ -8,7 +8,7 @@ class User(AbstractUser):
 
 class Item(models.Model):
     title = models.CharField(max_length=64)
-    description = models.CharField(max_length=256)
+    description = models.CharField(max_length=100)
     image_url = models.CharField(max_length=600)
     category = models.CharField(max_length=64)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="my_listings")

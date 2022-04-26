@@ -9,7 +9,10 @@ from .models import User, Item
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    active_listings = Item.objects.all()
+    return render(request, "auctions/index.html", {
+        "active_listings": active_listings
+    })
 
 
 def login_view(request):
@@ -74,5 +77,14 @@ def create_listing(request):
             owner=User(id=request.user.id)
         )
         listing.save()
-        # print(Item.objects.filter(owner=request.user.id))
+    
+    print(Item.objects.filter(owner=request.user.id))
     return render(request, "auctions/create_listing.html")
+
+def listings(request, listing_id):
+    
+    listing = Item.objects.get(id=listing_id)
+    
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })

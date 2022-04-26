@@ -6,7 +6,8 @@ Auctions:
     Bid
 
 Bids:
-
+    Value
+    Owner
 
 
 Comments:
