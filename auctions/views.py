@@ -1,3 +1,4 @@
+
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -5,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import User, Item
+from .models import User, Item, Bid
 
 
 def index(request):
@@ -69,14 +70,27 @@ def register(request):
 @login_required
 def create_listing(request):
     if request.method == "POST":
-        listing = Item(
-            title=request.POST["title"],
-            description=request.POST["description"],
-            image_url=request.POST["image_url"],
-            category=request.POST["category"],
-            owner=User(id=request.user.id)
-        )
-        listing.save()
+        if request.POST["price"].isdigit():
+            listing = Item(
+                title=request.POST["title"],
+                description=request.POST["description"],
+                image_url=request.POST["image_url"],
+                category=request.POST["category"],
+                owner=User(id=request.user.id)
+            )
+            listing.save()
+            
+            start_price = Bid(
+                bid_price=float(request.POST["price"]),
+                owner=User(id=request.user.id),
+                product=Item(id=listing.id)
+            )
+            start_price.save()
+            print(Bid.objects.filter(id=start_price.id))
+        else:
+            return render(request, "auctions/create_listing.html", {
+                "error": "error"
+            })
     
     print(Item.objects.filter(owner=request.user.id))
     return render(request, "auctions/create_listing.html")
