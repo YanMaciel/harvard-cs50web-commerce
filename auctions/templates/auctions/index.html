@@ -7,11 +7,11 @@
         <div class="card-group">
             {% for listing in active_listings %}
                 <li>
-                    <div class="card mr-3" style="width: 18rem;">
-                        <img src="{{ listing.image_url }}" class="card-img-top"alt="...">
+                    <div class="card mr-3 rounded shadow" style="width: 18rem; height:27.5rem">
+                        <img src="{{ listing.image_url }}" class="card-img-top" alt="..." style="height:50%">
                         <div class="card-body">
                         <h3 class="card-title">{{ listing.title }}</h3>
-                        <h5 class="card-title">Price: $</h5>      
+                        <h5 class="card-title">Price: ${{ current_prices }}</h5>      
                         <p class="card-text">{{ listing.description }}</p>
                         <a href="{% url 'listings' listing.id %}" class="btn btn-primary">Check this listing!</a>
                         </div>

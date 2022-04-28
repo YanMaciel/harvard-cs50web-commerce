@@ -11,8 +11,11 @@ from .models import User, Item, Bid
 
 def index(request):
     active_listings = Item.objects.all()
+    current_prices = Bid.objects.order_by().values_list('product').distinct()
+    print(current_prices)
     return render(request, "auctions/index.html", {
-        "active_listings": active_listings
+        "active_listings": active_listings,
+        "current_prices": current_prices
     })
 
 
@@ -98,7 +101,9 @@ def create_listing(request):
 def listings(request, listing_id):
     
     listing = Item.objects.get(id=listing_id)
+    current_price = Bid.objects.filter(id=listing_id).latest('id')
     
     return render(request, "auctions/listing.html", {
-        "listing": listing
+        "listing": listing,
+        "current_price": current_price
     })
