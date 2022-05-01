@@ -8,11 +8,19 @@
             <div class="col-md-6">
                 <h1 class="display-5 fw-bolder">{{ listing.title }}</h1>
                 <p class="lead">{{ listing.description }}</p>
-                <div class="fs-5 mb-5">Current bid: <span>${{ current_price.bid_price }}</span></div>
+                <div class="fs-5 mb-3">Starting price: <span><strong>${{ listing.starting_price }}</strong></span></div>
+                {% if listing.current_bid is None %}
+                <div class="fs-5 mb-3">No bids yet. Be the first to bid this listing!</div>
                 <div class="d-flex mb-3">
-                    <input class="form-control text-center me-6" id="inputQuantity" type="number" min="{{ current_price.bid_price }}" style="max-width: 8rem" placeholder="${{ current_price.bid_price|add:1 }}"/>
+                    <input class="form-control text-center me-6" id="inputQuantity" type="number" min="{{ listing.starting_price }}" style="max-width: 8rem" placeholder="${{ listing.starting_price|add:1 }}"/>
                     <button class="btn btn-warning flex-shrink-0" type="button"><i class="bi-cart-fill me-1"></i>Bid this product</button></div>
-                <div class="small mb-1">Listed by: <span class="badge badge-pill badge-info">{{ listing.owner }}</span></div>
+                {% else %}
+                <div class="fs-5 mb-3">Current bid: <strong>${{ listing.current_bid }}</strong></div>
+                <div class="d-flex mb-3">
+                    <input class="form-control text-center me-6" id="inputQuantity" type="number" min="{{ listing.current_bid }}" style="max-width: 8rem" placeholder="${{ listing.current_bid|add:1 }}"/>
+                    <button class="btn btn-warning flex-shrink-0" type="button"><i class="bi-cart-fill me-1"></i>Bid this product</button></div>
+                {% endif %}
+                <div class="small mb-1">Listed by: <span class="badge badge-pill badge-info">{{ listing.creator }}</span></div>
                 <div class="small mb-1">Category: <span class="badge badge-pill badge-secondary">{{ listing.category }}</span></div>
             </div>
         </div>

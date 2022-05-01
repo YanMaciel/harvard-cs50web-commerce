@@ -1,3 +1,4 @@
+
 {% extends "auctions/layout.html" %}
 
 {% block body %}
@@ -11,7 +12,11 @@
                         <img src="{{ listing.image_url }}" class="card-img-top" alt="..." style="height:50%">
                         <div class="card-body">
                         <h3 class="card-title">{{ listing.title }}</h3>
-                        <h5 class="card-title">Price: ${{ current_prices|return_item }}</h5>      
+                        {% if listing.current_bid is None %}
+                        <h5 class="card-title">Price: ${{ listing.starting_price }}</h5>    
+                        {% else %}
+                        <h5 class="card-title">Price: ${{ listing.current_bid }}</h5> 
+                        {% endif %}  
                         <p class="card-text">{{ listing.description }}</p>
                         <a href="{% url 'listings' listing.id %}" class="btn btn-primary">Check this listing!</a>
                         </div>
