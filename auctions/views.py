@@ -97,6 +97,19 @@ def listings(request, listing_id):
     
     listing = Listing.objects.get(id=listing_id)
     
+    if request.method == "POST":
+        if request.POST["bid_offer"].isdigit() and float(request.POST["bid_offer"]) > listing.starting_price and (listing.current_bid is None or float(request.POST["bid_offer"]) > listing.current_bid):
+            listing.current_bid = float(request.POST["bid_offer"])
+            listing.buyer = User(id=request.user.id)
+            listing.save()
+            
+            new_bid = Bid(
+                offer = float(request.POST["bid_offer"]),
+                owner = User(id=request.user.id),
+                product = listing
+            )
+            new_bid.save()
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
     })

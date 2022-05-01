@@ -3,27 +3,45 @@
 {% block body %}
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center rounded shadow p-3" style="background-color: #f4f4f4;">
+        <form method="post" id="new-bid" class="row gx-4 gx-lg-5 align-items-center rounded shadow p-3" style="background-color: #f4f4f4;">
+            {% csrf_token %}
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 img-fluid border" src="{{ listing.image_url }}" alt="..." style="height:400px; background-color: #fff;"/></div>
             <div class="col-md-6">
                 <h1 class="display-5 fw-bolder">{{ listing.title }}</h1>
                 <p class="lead">{{ listing.description }}</p>
                 <div class="fs-5 mb-3">Starting price: <span><strong>${{ listing.starting_price }}</strong></span></div>
-                {% if listing.current_bid is None %}
-                <div class="fs-5 mb-3">No bids yet. Be the first to bid this listing!</div>
-                <div class="d-flex mb-3">
-                    <input class="form-control text-center me-6" id="inputQuantity" type="number" min="{{ listing.starting_price }}" style="max-width: 8rem" placeholder="${{ listing.starting_price|add:1 }}"/>
-                    <button class="btn btn-warning flex-shrink-0" type="button"><i class="bi-cart-fill me-1"></i>Bid this product</button></div>
+                {% if user != listing.creator %}
+                    {% if listing.current_bid is None %}
+                        <div class="fs-5 mb-3 text-danger">No bids yet. Be the first to bid this listing!</div>
+                        <div class="d-flex mb-3">
+                            <input name="bid_offer" class="form-control text-center me-6" type="number" min="{{ listing.starting_price|add:1 }}" style="max-width: 8rem" placeholder="${{ listing.starting_price|add:1 }}"/>
+                            <button form="new-bid" class="btn btn-warning flex-shrink-0" type="submit"><i class="bi-cart-fill me-1"></i>Bid this product</button>
+                        </div>
+                    {% elif listing.current_bid is not None and user != listing.buyer %}
+                        <div class="fs-5 mb-3">Current bid: <strong>${{ listing.current_bid }}</strong></div>
+                        <div class="d-flex mb-3">
+                            <input name="bid_offer" class="form-control text-center me-6" type="number" min="{{ listing.current_bid|add:1 }}" style="max-width: 8rem" placeholder="${{ listing.current_bid|add:1 }}"/>
+                            <button form="new-bid" class="btn btn-warning flex-shrink-0" type="submit"><i class="bi-cart-fill me-1"></i>Bid this product</button>
+                        </div>
+                    {% elif user == listing.buyer %}
+                        <div class="fs-5 mb-2">Current bid: <strong>${{ listing.current_bid }}</strong> by you!</div>
+                        <div class="fs-5 mb-3 text-primary">You are winning this auction!</div>
+                        <div class="d-flex mb-3">
+                            <input name="bid_offer" class="form-control text-center me-6" type="number" min="{{ listing.current_bid|add:1 }}" style="max-width: 8rem" placeholder="${{ listing.current_bid|add:1 }}"/>
+                            <button form="new-bid" class="btn btn-warning flex-shrink-0" type="submit"><i class="bi-cart-fill me-1"></i>Bid this product</button>
+                        </div>
+                    {% endif %}
                 {% else %}
-                <div class="fs-5 mb-3">Current bid: <strong>${{ listing.current_bid }}</strong></div>
-                <div class="d-flex mb-3">
-                    <input class="form-control text-center me-6" id="inputQuantity" type="number" min="{{ listing.current_bid }}" style="max-width: 8rem" placeholder="${{ listing.current_bid|add:1 }}"/>
-                    <button class="btn btn-warning flex-shrink-0" type="button"><i class="bi-cart-fill me-1"></i>Bid this product</button></div>
+                    {% if listing.current_bid is None %}
+                        <div class="fs-5 mb-3 text-danger">No bids yet...</div>
+                    {% else %}
+                        <div class="fs-5 mb-3">Current bid: <strong>${{ listing.current_bid }}</strong> by {{ listing.buyer }}</div>
+                    {% endif %}
                 {% endif %}
                 <div class="small mb-1">Listed by: <span class="badge badge-pill badge-info">{{ listing.creator }}</span></div>
                 <div class="small mb-1">Category: <span class="badge badge-pill badge-secondary">{{ listing.category }}</span></div>
             </div>
-        </div>
+        </form>
     </div>
 </section>
 {% endblock %}

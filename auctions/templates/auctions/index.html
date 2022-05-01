@@ -8,17 +8,19 @@
         <div class="card-group">
             {% for listing in active_listings %}
                 <li>
-                    <div class="card mr-3 rounded shadow" style="width: 18rem; height:27.5rem">
+                    <div class="card mr-3 rounded shadow" style="width: 18rem; height:30rem">
                         <img src="{{ listing.image_url }}" class="card-img-top" alt="..." style="height:50%">
-                        <div class="card-body">
-                        <h3 class="card-title">{{ listing.title }}</h3>
-                        {% if listing.current_bid is None %}
-                        <h5 class="card-title">Price: ${{ listing.starting_price }}</h5>    
-                        {% else %}
-                        <h5 class="card-title">Price: ${{ listing.current_bid }}</h5> 
-                        {% endif %}  
-                        <p class="card-text">{{ listing.description }}</p>
-                        <a href="{% url 'listings' listing.id %}" class="btn btn-primary">Check this listing!</a>
+                            <div class="card-body">
+                            <h3 class="card-title">{{ listing.title }}</h3>
+                            {% if listing.current_bid is None %}
+                                <h5 class="card-title">Price: ${{ listing.starting_price }}</h5>    
+                            {% else %}
+                                <h5 class="card-title">Price: ${{ listing.current_bid }}</h5> 
+                            {% endif %}  
+                            <p class="card-text">{{ listing.description }}</p>
+                            <a href="{% url 'listings' listing.id %}" class="btn btn-primary mb-2">Check this listing!</a>
+                            <div class="small mb-1">Listed by: <span class="badge badge-pill badge-info">{{ listing.creator }}</span></div>
+                            <div class="small mb-1">Category: <span class="badge badge-pill badge-secondary">{{ listing.category }}</span></div>
                         </div>
                     </div>
                 </li>         
