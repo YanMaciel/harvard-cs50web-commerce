@@ -95,7 +95,7 @@ def create_listing(request):
                 "error": "error"
             })
     
-    print(Item.objects.filter(owner=request.user.id))
+    # print(Item.objects.filter(owner=request.user.id))
     return render(request, "auctions/create_listing.html")
 
 def listings(request, listing_id):
@@ -107,3 +107,4 @@ def listings(request, listing_id):
         "listing": listing,
         "current_price": current_price
     })
+    

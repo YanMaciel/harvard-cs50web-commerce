@@ -11,7 +11,7 @@
                         <img src="{{ listing.image_url }}" class="card-img-top" alt="..." style="height:50%">
                         <div class="card-body">
                         <h3 class="card-title">{{ listing.title }}</h3>
-                        <h5 class="card-title">Price: ${{ current_prices }}</h5>      
+                        <h5 class="card-title">Price: ${{ current_prices|return_item }}</h5>      
                         <p class="card-text">{{ listing.description }}</p>
                         <a href="{% url 'listings' listing.id %}" class="btn btn-primary">Check this listing!</a>
                         </div>
