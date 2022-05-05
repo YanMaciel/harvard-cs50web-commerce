@@ -5,8 +5,15 @@
     <div class="container px-4 px-lg-5 my-5">
         <form method="post" id="new-bid" class="row gx-4 gx-lg-5 align-items-center rounded shadow p-3" style="background-color: #f4f4f4;">
             {% csrf_token %}
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 img-fluid border" src="{{ listing.image_url }}" alt="..." style="height:400px; background-color: #fff;"/></div>
             <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0 img-fluid border" src="{{ listing.image_url }}" alt="..." style="height:400px; background-color: #fff;"/>
+            </div>
+            <div class="col-md-6">
+                {% if watched %}
+                    <button name="watchlist" type="submit" method="post" class="btn btn-primary btn-sm" disabled>Watchlist</button>
+                {% else %}
+                    <button name="watchlist" type="submit" method="post" class="btn btn-primary btn-sm" >Watchlist</button>
+                {% endif %}
                 <h1 class="display-5 fw-bolder">{{ listing.title }}</h1>
                 <p class="lead">{{ listing.description }}</p>
                 <div class="fs-5 mb-3">Starting price: <span><strong>${{ listing.starting_price }}</strong></span></div>
@@ -30,13 +37,16 @@
                             <input name="bid_offer" class="form-control text-center me-6" type="number" min="{{ listing.current_bid|add:1 }}" style="max-width: 8rem" placeholder="${{ listing.current_bid|add:1 }}"/>
                             <button form="new-bid" class="btn btn-warning flex-shrink-0" type="submit"><i class="bi-cart-fill me-1"></i>Bid this product</button>
                         </div>
+                    
                     {% endif %}
                 {% else %}
+                    
                     {% if listing.current_bid is None %}
                         <div class="fs-5 mb-3 text-danger">No bids yet...</div>
                     {% else %}
                         <div class="fs-5 mb-3">Current bid: <strong>${{ listing.current_bid }}</strong> by {{ listing.buyer }}</div>
                     {% endif %}
+                    <div>Close this Auction.</div>
                 {% endif %}
                 <div class="small mb-1">Listed by: <span class="badge badge-pill badge-info">{{ listing.creator }}</span></div>
                 <div class="small mb-1">Category: <span class="badge badge-pill badge-secondary">{{ listing.category }}</span></div>

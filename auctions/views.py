@@ -90,26 +90,39 @@ def create_listing(request):
     
     return render(request, "auctions/create_listing.html")
 
+@login_required
 def listings(request, listing_id):
     
     if not request.user.is_authenticated:
         return redirect("login")
     
     listing = Listing.objects.get(id=listing_id)
+    user = User.objects.get(id=request.user.id)
     
+    # TODO: To save user in the listing.watchers field when button "watchlist" is clicked
     if request.method == "POST":
-        if request.POST["bid_offer"].isdigit() and float(request.POST["bid_offer"]) > listing.starting_price and (listing.current_bid is None or float(request.POST["bid_offer"]) > listing.current_bid):
-            listing.current_bid = float(request.POST["bid_offer"])
-            listing.buyer = User(id=request.user.id)
+        if "watchlist" in request.POST:
+            print(request.POST)
+            listing.watchers.add(user)
             listing.save()
-            
-            new_bid = Bid(
-                offer = float(request.POST["bid_offer"]),
-                owner = User(id=request.user.id),
-                product = listing
-            )
-            new_bid.save()
-
+        elif "bid_offer" in request.POST:
+            print(request.POST)
+            if request.POST["bid_offer"].isdigit() and float(request.POST["bid_offer"]) > listing.starting_price and (listing.current_bid is None or float(request.POST["bid_offer"]) > listing.current_bid):
+                listing.current_bid = float(request.POST["bid_offer"])
+                listing.buyer = User(id=request.user.id)
+                listing.save()
+                
+                new_bid = Bid(
+                    offer = float(request.POST["bid_offer"]),
+                    owner = User(id=request.user.id),
+                    product = listing
+                )
+                new_bid.save()
+    
+    # watched = True    
+    # if not listing.watchers(User=request.user.id):
+    #     watched = False
+    print(listing)       
     return render(request, "auctions/listing.html", {
         "listing": listing,
     })

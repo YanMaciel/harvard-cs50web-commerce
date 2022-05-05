@@ -20,7 +20,7 @@ class Listing(models.Model):
     buyer = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
     
     def __str__(self):
-        return f"{self.title} - {self.starting_price}"
+        return f"{self.title} - {self.starting_price} - {self.watchers}"
     
 class Comment(models.Model):
     comment = models.CharField(max_length=100)
